@@ -1,0 +1,16 @@
+{
+  "name": "weather-app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "parcel src/index.html"
+  },
+  "author": "aldegid",
+  "license": "MIT",
+  "devDependencies": {
+    "sass": "^1.17.2"
+  },
+  "dependencies": {
+    "normalize.css": "^8.0.1"
+  }
+}
