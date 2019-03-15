@@ -2,20 +2,23 @@ export default class Component {
   constructor(host, props = {}) {
     this.host = host;
     this.props = props;
+    this.bindEverything();
     this._render();
+  }
+  bindEverything() {
   }
   _render() {
     this.host.innerHTML = "";
-    const content = this.render();
+    let content = this.render();
 
-    if (typeof content === 'string') {
-      this.host.innerHTML = content;
-    } else {
-      content.map(item => this._vDomPrototypeElementToHtmlElement(item)) // [string|HTMLElement] => [HTMLElement]
-        .forEach(htmlElement => {
-          this.host.appendChild(htmlElement);
-        });
+    if (!Array.isArray(content)) {
+      content = [ content ];
     }
+
+    content.map(item => this._vDomPrototypeElementToHtmlElement(item)) // [string|HTMLElement] => [HTMLElement]
+      .forEach(htmlElement => {
+        this.host.appendChild(htmlElement);
+      });
   }
   /* @returns {string|[string|HTMLElement|Component]} */
   render() {
@@ -29,14 +32,26 @@ export default class Component {
    */
   _vDomPrototypeElementToHtmlElement(element) {
     if (typeof element === 'string') {
-      const htmlElement = document.createElement('div'); // TODO: textNode
-      htmlElement.innerHTML = element;
-      return htmlElement;
+      let container;
+      const containsHtmlTags = /[<>&]/.test(element);
+      if (containsHtmlTags) {
+        container = document.createElement('div');
+        container.innerHTML = element;
+      } else {
+        container = document.createTextNode(element);
+      }
+      return container;
     } else {
       if (element.tag) {
         if (typeof element.tag === 'function') {
-          const container = document.createDocumentFragment();
+
+          const container = document.createElement('div');
+          if(element.classList){
+            container.classList.add(...element.classList);
+          }
+
           new element.tag(container, element.props);
+
           return container;
         } else {
           // string
@@ -46,7 +61,7 @@ export default class Component {
           }
 
           // ensure following element properties are Array
-          ['classList', 'attributes', 'children', 'eventHandler'].forEach(item => {
+          ['classList', 'attributes', 'children'].forEach(item => {
             if (element[item] && !Array.isArray(element[item])) {
               element[item] = [element[item]];
             }
@@ -58,11 +73,13 @@ export default class Component {
             element.attributes.forEach(attributeSpec => {
               container.setAttribute(attributeSpec.name, attributeSpec.value);
             });
-          if (element.eventHandler) {
-            element.eventHandler.forEach(event => {
-              container.addEventListener(event.eventType, event.handlerFunc);
-            });
           }
+
+          // process eventHandlers
+          if (element.eventHandlers) {
+            Object.keys(element.eventHandlers).forEach(eventType => {
+              container.addEventListener(eventType, element.eventHandlers[eventType]);
+            });
           }
 
           // process children

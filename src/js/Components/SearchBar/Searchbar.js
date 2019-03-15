@@ -1,13 +1,23 @@
 import Component from "../../framework/Component";
 
+
+function activatePlacesSearch() {
+  const input  = document.getElementById(search);
+  const autocomplete  = new google.maps.places.Autocomplete(input);
+}
+
 export default class Searchbar extends Component {
   constructor(host, props) {
     super(host, props);
+    //this.handleChange = this.handleChange.bind(this);
+  }
+
+  bindEverything() {
     this.handleChange = this.handleChange.bind(this);
   }
 
-  handleChange(e) {
-    console.log(e.target.value);
+  handleChange({target}) {
+    console.log(target.value);
   }
 
   render() {
@@ -25,12 +35,9 @@ export default class Searchbar extends Component {
               {name: 'id', value: 'search'},
               {name: 'placeholder', value: 'Search by city name or geo location'},
             ],
-            eventHandler: [
-              {
-                eventType: 'change',
-                handlerFunc: this.handleChange,
-              }
-            ]
+            eventHandlers: {
+              change: this.handleChange
+            }
           },
           {
             tag: 'div',

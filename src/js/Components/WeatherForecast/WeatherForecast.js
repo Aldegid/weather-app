@@ -7,10 +7,16 @@ import imageUrl from "../../../img/weather-icons/animated/cloudy-day-3.svg"
 import imageUrl1 from "../../../img/weather-icons/animated/snowy-6.svg"
 import imageUrl2 from "../../../img/weather-icons/animated/cloudy-night-2.svg"
 
+
+
+
+
+
 export default class WeatherForecast extends Component {
   constructor(host, props) {
     super(host, props);
   }
+
 
   render() {
     return [
