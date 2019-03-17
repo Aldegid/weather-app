@@ -9,7 +9,7 @@ function activatePlacesSearch() {
 export default class Searchbar extends Component {
   constructor(host, props) {
     super(host, props);
-    //this.handleChange = this.handleChange.bind(this);
+
   }
 
   bindEverything() {
@@ -17,7 +17,7 @@ export default class Searchbar extends Component {
   }
 
   handleChange({target}) {
-    console.log(target.value);
+    return target.value;
   }
 
   render() {

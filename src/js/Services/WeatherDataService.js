@@ -1,3 +1,5 @@
+import SearchBar from "../Components/SearchBar";
+
 class WeatherDataService {
   constructor() {
     this.apiKey = "ffa19df254477b52e5f0e38980606a54";
