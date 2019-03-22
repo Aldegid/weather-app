@@ -3,7 +3,6 @@ import {Searchbar} from "../SearchBar";
 import {CurrentWeather} from "../CurrentWeather";
 import {WeatherForecast} from "../WeatherForecast";
 import {WeatherTools} from "../WeatherTools";
-import {Counter} from "../Counter";
 import {CountControls} from "../CountControls";
 import { PrettyNumber } from "../PrettyNumber";
 
@@ -31,26 +30,10 @@ export default class App extends Component {
   render() {
     return [
       {
-        tag: CountControls,
-        props: {
-          value: 8,
-          updateNumber: this.updateValue
-        }
-
-      },
-      {
-        tag: PrettyNumber,
-        props: {
-          value: this.state.value,
-          updateNumber: this.updateValue
-        }
-      },
-      {
         tag: Searchbar,
       },
       {
         tag: CurrentWeather,
-
       },
       {
         tag: WeatherForecast,
