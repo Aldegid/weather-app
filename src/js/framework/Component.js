@@ -2,9 +2,20 @@ export default class Component {
   constructor(host, props = {}) {
     this.host = host;
     this.props = props;
+    this.init();
     this.bindEverything();
     this._render();
   }
+
+  init() {
+
+  }
+
+  updateState(stateDelta) {
+    this.state = Object.assign({}, this.state, stateDelta);
+    this._render();
+  }
+
   bindEverything() {
   }
   _render() {
@@ -56,7 +67,7 @@ export default class Component {
         } else {
           // string
           const container = document.createElement(element.tag);
-          if (element.content) {
+          if (element.content !== undefined) {
             container.innerHTML = element.content;
           }
 

@@ -28,8 +28,11 @@ class WeatherDataService {
       });
   }
   getCurrentWeather() {
-
-
+    const city = 'london'
+    const api = `https://api.openweathermap.org//data/2.5/weather?q=${city}&units=${this.unit}&appid=${this.apiKey}`
+    return fetch(api).then(response =>
+      response.ok ? response.json() : Promise.reject(response.statusText)
+    );
 
   }
   getWeatherForecast() {

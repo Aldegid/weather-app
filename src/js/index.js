@@ -1,6 +1,7 @@
 import 'normalize.css'
 import '../sass/main.sass'
-
+//import googleAutocomplete from "./googlePlaces"
+//google.maps.event.addDomListener(window, 'load', googleAutocomplete);
 
 import {App} from './Components/App';
 

@@ -85,8 +85,8 @@ export default class CurrentWeather extends Component {
     if(this.geoData) {
       // console.log('hoho,', 'geodata arrived!')
       // console.log(`Kiyv, UA ${this.geoData.name}`, ": var from content");
-      console.log(this.geoData, "render");
-      if(this.geoData.dt > this.geoData.sys.sunrice && this.geoData.dt < this.geoData.sys.sunset) {
+      //console.log(this.geoData, "render");
+      if(this.geoData.dt < this.geoData.sys.sunset) {
         console.log('day')
       } else {
         console.log('night')

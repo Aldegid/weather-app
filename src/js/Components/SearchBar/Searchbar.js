@@ -1,10 +1,8 @@
 import Component from "../../framework/Component";
+import googleAutocomplete from "../../googlePlaces"
 
+google.maps.event.addDomListener(window, 'load', googleAutocomplete);
 
-function activatePlacesSearch() {
-  const input  = document.getElementById(search);
-  const autocomplete  = new google.maps.places.Autocomplete(input);
-}
 
 export default class Searchbar extends Component {
   constructor(host, props) {
@@ -16,8 +14,10 @@ export default class Searchbar extends Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
-  handleChange({target}) {
-    return target.value;
+  handleChange(e) {
+    e.preventDefault();
+    console.log(e.target.value);
+    return e.target.value;
   }
 
   render() {
