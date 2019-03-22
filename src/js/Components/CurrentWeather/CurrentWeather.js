@@ -68,38 +68,69 @@ const getWeatherIcon = wetherState => {
 export default class CurrentWeather extends Component {
   constructor(host, props) {
     super(host, props);
-    this.apiData;
+    //this.apiData;
     this.geoLocationData();
-    this.weatherType = 'weather'
     AppState.watch("USERINPUT", this.updateMyself);
+    AppState.watch("UNIT", this.computeUnit);
   }
 
   init() {
-    ['updateMyself']
+    ['updateMyself', 'geoLocationData', 'changeUnitToImperial','changeUnitToMetric', 'computeUnit']
       .forEach(methodName => this[methodName] = this[methodName].bind(this));
     this.apiData = null;
+    this.state = {
+      weatherType : 'weather',
+      unit : 'metric',
+      city: null
+    }
+  }
+
+  computeUnit(updatedUnit){
+    //console.log(updatedUnit);
+    WeatherDataService.getCurrentWeather(updatedUnit.city, updatedUnit.unit).then(data => {
+      this.apiData = data;
+      //this.state.city = this.apiData.name;
+      this.updateState(updatedUnit)
+    });
   }
 
   geoLocationData() {
-    const weatherType = 'weather'
-    return WeatherDataService.getWetherByGeolocation(weatherType).then(data => {
+    WeatherDataService.getWetherByGeolocation(this.state.weatherType, this.state.unit).then(data => {
       this.apiData = data;
-      this._render()
+      this.state.city = this.apiData.name;
+      this.updateState(this.apiData);
     });
   }
 
   updateMyself(userinput) {
-    WeatherDataService.getCurrentWeather(userinput).then(data => {
+
+    WeatherDataService.getCurrentWeather(userinput, this.state.unit).then(data => {
       this.apiData = data;
-      this._render();
+      this.state.city = this.apiData.name;
+      this.updateState(this.apiData)
     });
+  }
+
+  changeUnitToImperial(){
+    //this.state.unit = 'imperial';
+    AppState.update('UNIT', {
+      city: this.state.city,
+      unit: 'imperial'
+    })
+  }
+  changeUnitToMetric(){
+    //this.state.unit = 'metric';
+    AppState.update('UNIT', {
+      city: this.state.city,
+      unit: 'metric'
+    })
   }
 
   render() {
     if (this.apiData) {
       //console.log('hoho,', 'geodata arrived!')
       //console.log(`Kiyv, UA ${this.geoData.name}`, ": var from content");
-      console.log(this.apiData, "render");
+      //console.log(this.apiData, "render");
       if (this.apiData.dt < this.apiData.sys.sunset) {
         console.log("day");
       } else {
@@ -211,6 +242,9 @@ export default class CurrentWeather extends Component {
                                     "celsium",
                                     "active"
                                   ],
+                                  eventHandlers: {
+                                    click: this.changeUnitToMetric,
+                                  },
                                   content: "C°"
                                 },
                                 {
@@ -219,6 +253,9 @@ export default class CurrentWeather extends Component {
                                     "temperature__state-button",
                                     "celsium"
                                   ],
+                                  eventHandlers: {
+                                    click: this.changeUnitToImperial,
+                                  },
                                   content: "F°"
                                 }
                               ]

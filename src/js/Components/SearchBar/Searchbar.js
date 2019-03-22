@@ -18,7 +18,7 @@ export default class Searchbar extends Component {
   handleChange(e) {
     e.preventDefault();
     e.stopPropagation();
-    console.log(e.target.value);
+    //console.log(e.target.value);
     AppState.update('USERINPUT', e.target.value)
     //return e.target.value;
   }

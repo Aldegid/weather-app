@@ -70,26 +70,41 @@ export default class WeatherForecast extends Component {
     this.apiData;
     this.geoLocationData();
     AppState.watch("USERINPUT", this.updateMyself);
+    AppState.watch("UNIT", this.computeUnit);
   }
 
   init() {
-    ['updateMyself']
+    ['updateMyself', 'computeUnit', 'geoLocationData']
       .forEach(methodName => this[methodName] = this[methodName].bind(this));
     this.apiData = null;
+      this.state = {
+        weatherType : 'forecast',
+        unit : 'metric',
+        city: null
+    }
+  }
+
+  computeUnit(updatedUnit){
+    console.log(updatedUnit);
+    WeatherDataService.getWeatherForecast(updatedUnit.city, updatedUnit.unit).then(data => {
+      this.apiData = data;
+      this.updateState(updatedUnit);
+    });
   }
 
   geoLocationData() {
-    const weatherType = 'forecast'
-    return WeatherDataService.getWetherByGeolocation(weatherType).then(data => {
+    return WeatherDataService.getWetherByGeolocation(this.state.weatherType, this.state.unit).then(data => {
       this.apiData = data;
-      this._render()
+      this.state.city = this.apiData.city.name;
+      this.updateState(this.apiData);
     });
   }
 
   updateMyself(userinput) {
-    WeatherDataService.getWeatherForecast(userinput).then(data => {
+    WeatherDataService.getWeatherForecast(userinput, this.state.unit).then(data => {
       console.log(data);
       this.apiData = data;
+      this.state.city = this.apiData.city.name;
       this.updateState(this.apiData);
     });
   }
