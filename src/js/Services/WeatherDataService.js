@@ -6,7 +6,7 @@ class WeatherDataService {
     this.unit = "metric";
   }
 
-  getWetherByGeolocation(){
+  getWetherByGeolocation(weathertype){
 
     const getGeolocation = () =>
       new Promise((resolve, reject) =>
@@ -15,7 +15,7 @@ class WeatherDataService {
     const getWeatherByPosition = position => {
       const { longitude } = position.coords;
       const { latitude } = position.coords;
-      const api = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=${this.unit}&appid=${this.apiKey}`;
+      const api = `https://api.openweathermap.org/data/2.5/${weathertype}?lat=${latitude}&lon=${longitude}&units=${this.unit}&appid=${this.apiKey}`;
       return fetch(api).then(response =>
         response.ok ? response.json() : Promise.reject(response.statusText)
       );
@@ -27,17 +27,17 @@ class WeatherDataService {
         return result;
       });
   }
-  getCurrentWeather() {
-    const city = 'london'
-    const api = `https://api.openweathermap.org//data/2.5/weather?q=${city}&units=${this.unit}&appid=${this.apiKey}`
+  getCurrentWeather(userInput) {
+    //const city = 'london'
+    const api = `https://api.openweathermap.org//data/2.5/weather?q=${userInput}&units=${this.unit}&appid=${this.apiKey}`
     return fetch(api).then(response =>
       response.ok ? response.json() : Promise.reject(response.statusText)
     );
 
   }
-  getWeatherForecast() {
-    const city = 'london'
-    const api = `https://api.openweathermap.org//data/2.5/forecast?q=${city}&units=${this.unit}&appid=${this.apiKey}`
+  getWeatherForecast(userInput) {
+    //const city = 'london'
+    const api = `https://api.openweathermap.org//data/2.5/forecast?q=${userInput}&units=${this.unit}&appid=${this.apiKey}`
     return fetch(api).then(response =>
       response.ok ? response.json() : Promise.reject(response.statusText)
     );

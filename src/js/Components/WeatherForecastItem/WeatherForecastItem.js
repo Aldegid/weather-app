@@ -25,7 +25,7 @@ export default class WeatherForecastItem extends Component {
           {
             tag: Temperature,
             props: {
-              temperature: this.props.temperature,
+              temperature: Math.round(this.props.temperature),
               unit: 'C'
             }
           }

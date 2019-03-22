@@ -12,19 +12,7 @@ export default class App extends Component {
   }
 
   init() {
-    this.updateValue = this.updateValue.bind(this);
-    this.state = {
-      value: 123
-    };
   }
-
-
-  updateValue(newState) {
-    //console.log(newState);
-    this.state.value = newState;
-    //this.updateState(newState);
-  }
-
 
 
   render() {
