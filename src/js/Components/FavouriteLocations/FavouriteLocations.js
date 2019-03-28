@@ -1,49 +1,81 @@
 import Component from "../../framework/Component";
+import AppState from "../../Services/AppState";
 
 export default class FavouriteLocations extends Component {
   constructor(host, props) {
     super(host, props);
+    AppState.watch("FAVOURITE", this.updateMyself);
   }
 
+  init() {
+    ['updateMyself','getWeatherFromFavorite']
+    .forEach(methodName => this[methodName] = this[methodName].bind(this));
+  }
+
+  getWeatherFromFavorite(e) {
+    console.log(e.target);
+    AppState.update('SHOWFAVOURITE', e.target.id);
+  }
+
+  updateMyself() {
+    this._render();
+  }
 
   render() {
-    return  [
-      {
-        tag: 'div',
-        classList: ["container__tools-item"],
-        children: [
-          {
-            tag: 'div',
-            classList: ["history-head"],
-            content: `<h3 class="history-h3"> <i class="fa fa-star" aria-hidden="true"></i>Favorites</h3>`
-          },
-          {
-            tag: 'div',
-            classList: ["favorite-item"],
-            content: `<p>Kiyv, Ukrain, Coords</p>
-                      <button type="button" class="clear-button">
-                        <i class="fa fa-trash" aria-hidden="true"></i>
-                      </button>`
-          },
-          {
-            tag: 'div',
-            classList: ["favorite-item"],
-            content: `<p>Kiyv, Ukrain, Coords</p>
-                      <button type="button" class="clear-button">
-                        <i class="fa fa-trash" aria-hidden="true"></i>
-                      </button>`
-          },
-          {
-            tag: 'div',
-            classList: ["favorite-item"],
-            content: `<p>Kiyv, Ukrain, Coords</p>
-                      <button type="button" class="clear-button">
-                        <i class="fa fa-trash" aria-hidden="true"></i>
-                      </button>`
-          },
+    const favItems = JSON.parse(localStorage.getItem("favourite"));
+    if(favItems) {
+      return favItems.map(item => {
+        return {
+          tag: 'div',
+          classList: ['favorite-item'],
+          children: [
+            {
+              tag: 'p',
+              classList: ['favourite-city'],
+              content: item,
+              attributes: [
+                {
+                  name: 'id',
+                  value: item
+                }
+              ],
+              eventHandlers: {
+                click: this.getWeatherFromFavorite
+              }
 
-        ]
-      }
-    ];
+            },
+            {
+              tag: 'button',
+              classList:['clear-button'],
+              attributes: [
+                {
+                  name: 'type',
+                  value: 'button'
+                }
+              ],
+              children: [
+                {
+                  tag: 'i',
+                  classList: ['fa', 'fa-trash']
+                }
+              ]
+            }
+          ]
+
+        }
+      });
+    } else {
+      return ''
+    }
+
+
+    // {
+    //   tag: 'div',
+    //   classList: ["favorite-item"],
+    //   content: `<p>Kiyv, Ukrain, Coords</p>
+    //             <button type="button" class="clear-button">
+    //               <i class="fa fa-trash" aria-hidden="true"></i>
+    //             </button>`
+    // },
   }
 }

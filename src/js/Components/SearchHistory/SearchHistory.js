@@ -1,41 +1,49 @@
 import Component from "../../framework/Component";
+import AppState from "../../Services/AppState";
 
-export default class Wind extends Component {
+export default class SearchHistory extends Component {
   constructor(host, props) {
     super(host, props);
+    AppState.watch("USERINPUT", this.updateMyself);
   }
 
+  init() {
+    ['updateMyself']
+    .forEach(methodName => this[methodName] = this[methodName].bind(this));
+  }
+
+  getWeatherFromHistory(e) {
+    console.log(e.target);
+    AppState.update('SHOWFROMHISTORY', e.target.id);
+  }
+
+  updateMyself() {
+    this._render();
+  }
 
   render() {
-    return  [
-      {
-        tag: 'div',
-        classList: ["container__tools-item"],
-        children: [
-          {
-            tag: 'div',
-            classList: ["history-head"],
-            content: `<h3 class="history-h3"><i class="fa fa-clock-o" aria-hidden="true"></i>History</h3>              <button type="button" class="clear-button">
-                <i class="fa fa-trash" aria-hidden="true"></i>
-              </button>`
-          },
-          {
-            tag: 'p',
-            classList: ["history-item"],
-            content: 'Kiyv, Ukraine, Coords'
-          },
-          {
-            tag: 'p',
-            classList: ["history-item"],
-            content: 'Kiyv, Ukraine, Coords'
-          },
-          {
-            tag: 'p',
-            classList: ["history-item"],
-            content: 'Kiyv, Ukraine, Coords'
-          },
-        ]
-      }
-    ];
+    const srchistory = JSON.parse(localStorage.getItem("history"));
+    console.log(srchistory);
+    if(srchistory) {
+      return srchistory.map(item => {
+        return {
+          tag: 'p',
+          classList: ['search-city'],
+          content: item,
+          attributes: [
+            {
+              name: 'id',
+              value: item
+            }
+          ],
+          eventHandlers: {
+            click: this.getWeatherFromHistory
+          }
+        }
+      })
+    } else {
+      return ''
+    }
+
   }
 }

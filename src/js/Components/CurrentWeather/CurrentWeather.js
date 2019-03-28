@@ -70,18 +70,23 @@ export default class CurrentWeather extends Component {
     super(host, props);
     //this.apiData;
     this.geoLocationData();
+    this.favStar = document.querySelector('.fav-button');
     AppState.watch("USERINPUT", this.updateMyself);
     AppState.watch("UNIT", this.computeUnit);
+    AppState.watch("SHOWFAVOURITE", this.updateMyself);
+    AppState.watch("SHOWFROMHISTORY", this.updateMyself);
   }
 
   init() {
-    ['updateMyself', 'geoLocationData', 'changeUnitToImperial','changeUnitToMetric', 'computeUnit']
+    ['updateMyself', 'geoLocationData', 'changeUnitToImperial','changeUnitToMetric', 'computeUnit', 'toggleFavorite', 'isCityInFav']
       .forEach(methodName => this[methodName] = this[methodName].bind(this));
     this.apiData = null;
     this.state = {
       weatherType : 'weather',
+      favorite: localStorage.getItem("favourite") ? JSON.parse(localStorage.getItem("favourite")) : [],
       unit : 'metric',
-      city: null
+      city: null,
+      celsium: 'active'
     }
   }
 
@@ -103,7 +108,7 @@ export default class CurrentWeather extends Component {
   }
 
   updateMyself(userinput) {
-
+    //console.log(userinput)
     WeatherDataService.getCurrentWeather(userinput, this.state.unit).then(data => {
       this.apiData = data;
       this.state.city = this.apiData.name;
@@ -112,29 +117,64 @@ export default class CurrentWeather extends Component {
   }
 
   changeUnitToImperial(){
-    //this.state.unit = 'imperial';
     AppState.update('UNIT', {
       city: this.state.city,
-      unit: 'imperial'
+      unit: 'imperial',
+      far: 'active',
+      celsium: 'disable'
     })
   }
+
+  isCityInFav() {
+    setTimeout(() => {
+      const favBTn = document.querySelector('.fav-button');
+      if(this.state.favorite.includes(this.state.city)) {
+        favBTn.classList.add('active');
+      }
+    }, 0);
+
+  }
+
+
+  toggleFavorite(){
+    const favorite = document.querySelector('.fav-button');
+    //console.log(this.state.city);
+    favorite.classList.toggle('active');
+    const favItem = this.state.favorite.indexOf(this.state.city);
+    console.log(favItem);
+    if(this.state.favorite.includes(this.state.city)) {
+      if(favItem !== -1) {
+        this.state.favorite.splice(favItem, 1);
+      }
+    } else if(this.state.favorite.length < 5) {
+      this.state.favorite.push(this.state.city);
+    }
+
+    localStorage.setItem('favourite', JSON.stringify(this.state.favorite));
+    AppState.update("FAVOURITE", this.state.favorite);
+    // this.updateState();
+  }
+
   changeUnitToMetric(){
     //this.state.unit = 'metric';
     AppState.update('UNIT', {
       city: this.state.city,
-      unit: 'metric'
+      unit: 'metric',
+      far: 'disable',
+      celsium: 'active'
     })
   }
 
   render() {
     if (this.apiData) {
+      this.isCityInFav();
       //console.log('hoho,', 'geodata arrived!')
       //console.log(`Kiyv, UA ${this.geoData.name}`, ": var from content");
       //console.log(this.apiData, "render");
       if (this.apiData.dt < this.apiData.sys.sunset) {
-        console.log("day");
+        //console.log("day");
       } else {
-        console.log("night");
+        //console.log("night");
       }
       return [
         {
@@ -170,7 +210,10 @@ export default class CurrentWeather extends Component {
                           children: [
                             {
                               tag: "i",
-                              classList: ["fa", "fa-star"]
+                              classList: ["fa", "fa-star"],
+                              eventHandlers: {
+                                click: this.toggleFavorite,
+                              },
                             }
                           ]
                         }
@@ -240,7 +283,8 @@ export default class CurrentWeather extends Component {
                                   classList: [
                                     "temperature__state-button",
                                     "celsium",
-                                    "active"
+                                    `${this.state.celsium}`
+
                                   ],
                                   eventHandlers: {
                                     click: this.changeUnitToMetric,
@@ -251,7 +295,8 @@ export default class CurrentWeather extends Component {
                                   tag: "button",
                                   classList: [
                                     "temperature__state-button",
-                                    "celsium"
+                                    "farenheit",
+                                    `${this.state.far}`
                                   ],
                                   eventHandlers: {
                                     click: this.changeUnitToImperial,

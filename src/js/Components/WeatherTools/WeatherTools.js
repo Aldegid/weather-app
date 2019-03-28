@@ -6,6 +6,15 @@ export default class WeatherTools extends Component {
     super(host, props);
   }
 
+  init() {
+    this.resetSerchHistory = this.resetSerchHistory.bind(this);
+  }
+
+  resetSerchHistory() {
+    localStorage.removeItem('history');
+    this._render();
+  }
+
   render() {
     return [
       {
@@ -17,10 +26,63 @@ export default class WeatherTools extends Component {
             classList: ["container__tools"],
             children: [
               {
-                tag: SearchHistory
+                tag: 'div',
+                classList: ["container__tools-item"],
+                children: [
+                  {
+                    tag: 'div',
+                    classList: ['history-head'],
+                    children: [
+                      {
+                        tag: 'i',
+                        classList: ['fa', 'fa-clock-o'],
+                      },
+                      {
+                        tag: 'h3',
+                        classList: ['history-h3'],
+                        content: 'History'
+                      },
+                      {
+                        tag: 'button',
+                        classList:['clear-button'],
+                        attributes: [
+                          {
+                            name: 'type',
+                            value: 'button'
+                          }
+                        ],
+                        eventHandlers: {
+                          click: this.resetSerchHistory,
+                        },
+                        children: [
+                          {
+                            tag: 'i',
+                            classList: ['fa', 'fa-trash']
+                          }
+                        ]
+                      }
+                    ]
+
+                  },
+                  {
+                    tag: SearchHistory
+                  }
+                ]
               },
               {
-                tag: FavouriteLocations
+                tag: 'div',
+                classList: ["container__tools-item"],
+                children: [
+                  {
+                    tag: 'div',
+                    classList: ["favorite-head"],
+                    content: `<h3 class="history-h3"> <i class="fa fa-star" aria-hidden="true"></i>Favorites</h3>`
+                  },
+                  {
+                    tag: FavouriteLocations,
+                    classList: ['test']
+                  },
+                ]
               }
             ]
           },

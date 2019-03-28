@@ -3,20 +3,13 @@ export default class Component {
     this.host = host;
     this.props = props;
     this.init();
-    this.bindEverything();
     this._render();
   }
-
   init() {
-
   }
-
   updateState(stateDelta) {
     this.state = Object.assign({}, this.state, stateDelta);
     this._render();
-  }
-
-  bindEverything() {
   }
   _render() {
     this.host.innerHTML = "";
@@ -25,6 +18,8 @@ export default class Component {
     if (!Array.isArray(content)) {
       content = [ content ];
     }
+
+    // console.log(content);
 
     content.map(item => this._vDomPrototypeElementToHtmlElement(item)) // [string|HTMLElement] => [HTMLElement]
       .forEach(htmlElement => {
@@ -56,11 +51,10 @@ export default class Component {
       if (element.tag) {
         if (typeof element.tag === 'function') {
 
-          const container = document.createElement('div');
-          if(element.classList){
+          const container = document.createElement('div');//createDocumentFragment();
+          if (element.classList) {
             container.classList.add(...element.classList);
           }
-
           new element.tag(container, element.props);
 
           return container;

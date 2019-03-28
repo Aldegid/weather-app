@@ -13,13 +13,23 @@ export default class Searchbar extends Component {
 
   init() {
     this.handleChange = this.handleChange.bind(this);
+    this.state = {
+      history: localStorage.getItem("history") ? JSON.parse(localStorage.getItem("history")) : [],
+    }
   }
 
   handleChange(e) {
-    e.preventDefault();
-    e.stopPropagation();
+    // e.preventDefault();
+    // e.stopPropagation();
     //console.log(e.target.value);
-    AppState.update('USERINPUT', e.target.value)
+    AppState.update('USERINPUT', e.target.value);
+    if(this.state.history.includes(e.target.value)) {
+      return
+    } else {
+      this.state.history.push(e.target.value);
+    }
+    localStorage.setItem('history', JSON.stringify(this.state.history));
+
     //return e.target.value;
   }
 

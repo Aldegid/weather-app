@@ -1,4 +1,3 @@
-import SearchBar from "../Components/SearchBar";
 
 class WeatherDataService {
   constructor() {
@@ -30,17 +29,34 @@ class WeatherDataService {
   getCurrentWeather(userInput, unit) {
     //const city = 'london'
     const api = `https://api.openweathermap.org//data/2.5/weather?q=${userInput}&units=${unit}&appid=${this.apiKey}`
-    return fetch(api).then(response =>
-      response.ok ? response.json() : Promise.reject(response.statusText)
+    return fetch(api).then(response => {
+      if(response.ok) {
+        return response.json();
+      }
+      if(response.status === 404) {
+        document.querySelector('.container__inner').innerHTML = `<h3>Oops, nothing found, please, check your city name</h3>`
+      } else {
+        Promise.reject(response.statusText);
+      }
+    }
     );
 
   }
   getWeatherForecast(userInput, unit) {
     //const city = 'london'
     const api = `https://api.openweathermap.org//data/2.5/forecast?q=${userInput}&units=${unit}&appid=${this.apiKey}`
-    return fetch(api).then(response =>
-      response.ok ? response.json() : Promise.reject(response.statusText)
+    return fetch(api).then(response => {
+      if(response.ok) {
+        return response.json();
+      }
+      if(response.status === 404) {
+        document.querySelector('.container__inner-small').innerHTML = ``
+      } else {
+        Promise.reject(response.statusText);
+      }
+    }
     );
+
   }
 }
 

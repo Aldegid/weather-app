@@ -14,7 +14,7 @@
   background-attachment: fixed
   color: #ffffff
   font-family: 'Roboto-example', sans-serif
-  height: 120vh
+  //height: 120vh
   font-size: 20px
   // font-weight: 300
 
@@ -239,7 +239,7 @@
 
 .container__tools-item
   padding: 25px
-  width: calc(50% - 50px)
+  //width: calc(50% - 50px)
   container__tools-itemborder-right: 1px solid rgba(#fff, .3)
   .history-h3
     display: inline-block
@@ -259,6 +259,12 @@
   align-items: center
   .fa
     font-size: 28px
+    //margin-right: 15px
+
+.favorite-head
+  .fa
+    font-size: 28px
+    margin-right: 15px
 
 .favorite-item
   display: flex
@@ -267,17 +273,23 @@
   margin-top: 10px
   margin-bottom: 0
   p
-    margin: 0
+    margin: 0 50px 0 0
+
+.favourite-city, .search-city
+  cursor: pointer
+  &:hover
+    color: #F8A400
 
 .clear-button
   background-color: transparent
-  margin: 0
+  margin: 0 0 0 15px
   border: none
   cursor: pointer
   color: #ffffff
   border-radius: 3px
   &:hover
     background-color: rgba(#fff, .3)
+
 
 // .pac-item > span:last-child
 //     display: none
