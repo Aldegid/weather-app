@@ -86,7 +86,8 @@ export default class CurrentWeather extends Component {
       favorite: localStorage.getItem("favourite") ? JSON.parse(localStorage.getItem("favourite")) : [],
       unit : 'metric',
       city: null,
-      celsium: 'active'
+      celsium: 'active',
+      unitWind: 'm/s'
     }
   }
 
@@ -121,38 +122,9 @@ export default class CurrentWeather extends Component {
       city: this.state.city,
       unit: 'imperial',
       far: 'active',
-      celsium: 'disable'
+      celsium: 'disable',
+      unitWind: 'mph'
     })
-  }
-
-  isCityInFav() {
-    setTimeout(() => {
-      const favBTn = document.querySelector('.fav-button');
-      if(this.state.favorite.includes(this.state.city)) {
-        favBTn.classList.add('active');
-      }
-    }, 0);
-
-  }
-
-
-  toggleFavorite(){
-    const favorite = document.querySelector('.fav-button');
-    //console.log(this.state.city);
-    favorite.classList.toggle('active');
-    const favItem = this.state.favorite.indexOf(this.state.city);
-    console.log(favItem);
-    if(this.state.favorite.includes(this.state.city)) {
-      if(favItem !== -1) {
-        this.state.favorite.splice(favItem, 1);
-      }
-    } else if(this.state.favorite.length < 5) {
-      this.state.favorite.push(this.state.city);
-    }
-
-    localStorage.setItem('favourite', JSON.stringify(this.state.favorite));
-    AppState.update("FAVOURITE", this.state.favorite);
-    // this.updateState();
   }
 
   changeUnitToMetric(){
@@ -161,9 +133,41 @@ export default class CurrentWeather extends Component {
       city: this.state.city,
       unit: 'metric',
       far: 'disable',
-      celsium: 'active'
+      celsium: 'active',
+      unitWind: 'm/s'
     })
   }
+
+  isCityInFav() {
+    setTimeout(() => {
+      const favBTn = document.querySelector('.fav-button');
+      if(this.state.favorite.includes(`${this.state.city}, ${this.apiData.sys.country}`)) {
+        favBTn.classList.add('active');
+      }
+    }, 0);
+
+  }
+
+
+  toggleFavorite(){
+    const favBTn = document.querySelector('.fav-button');
+    //console.log(this.state.city);
+    favBTn.classList.toggle('active');
+    const favItem = this.state.favorite.indexOf(`${this.state.city}, ${this.apiData.sys.country}`);
+    //console.log(favItem, `${this.state.city}, ${this.apiData.sys.country}`);
+    if(this.state.favorite.includes(`${this.state.city}, ${this.apiData.sys.country}`)) {
+      if(favItem !== -1) {
+        this.state.favorite.splice(favItem, 1);
+      }
+    } else if(this.state.favorite.length < 5) {
+      this.state.favorite.push(`${this.state.city}, ${this.apiData.sys.country}`);
+    }
+
+    localStorage.setItem('favourite', JSON.stringify(this.state.favorite));
+    AppState.update("FAVOURITE", this.state.favorite);
+    // this.updateState();
+  }
+
 
   render() {
     if (this.apiData) {
@@ -206,14 +210,22 @@ export default class CurrentWeather extends Component {
                             "container__inputs-buttons",
                             "fav-button"
                           ],
-                          attributes: [{ name: "type", value: "button" }],
+                          eventHandlers: {
+                            click: this.toggleFavorite,
+                          },
+                          attributes: [
+                            { name: "type",
+                            value: "button"
+                            },
+                            {
+                              name: 'title',
+                              value: 'Add to favorite'
+                            }
+                        ],
                           children: [
                             {
                               tag: "i",
                               classList: ["fa", "fa-star"],
-                              eventHandlers: {
-                                click: this.toggleFavorite,
-                              },
                             }
                           ]
                         }
@@ -361,7 +373,7 @@ export default class CurrentWeather extends Component {
                           tag: Wind,
                           props: {
                             speed: `${this.apiData.wind.speed}`,
-                            unit: "m/s"
+                            unit: this.state.unitWind
                           }
                         },
                         {

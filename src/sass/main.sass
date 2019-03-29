@@ -8,25 +8,25 @@
   font-size: 18px
 
 .main
-  background-image: url('../img/bg2.jpg')
+  background-image: url('../img/bg4.jpg')
   background-repeat: no-repeat
   background-size: cover
   background-attachment: fixed
   color: #ffffff
   font-family: 'Roboto-example', sans-serif
-  //height: 120vh
+  height: 100vh
   font-size: 20px
   // font-weight: 300
 
 .container__inputs
   position: relative
   margin: 0 auto
-  max-width: 768px
+  max-width: 480px
   padding: 25px 0
   display: flex
   justify-content: space-between
 
-.container__inputs-search, .container__inputs-buttons
+.container__inputs-search
   background-color: rgba(#fff, .2)
   border-radius: 8px
   height: 50px
@@ -34,6 +34,15 @@
   color: #ffffff
   padding: 0 15px
   cursor: pointer
+
+.container__inputs-buttons
+  background-color: transparent
+  border: none
+  padding: 15px
+  color: #ffffff
+  .fa
+    font-size: 30px
+
 
 .container__inputs-search
   width: 100%
@@ -50,11 +59,16 @@
 
 .fav-button
   cursor: pointer
+  border: 2px solid transparent
+  &:hover
+    color: #F8A400
+    border: 2px dashed rgba(#fff, .2)
+    border-radius: 5px
 
 
 .container
   margin: 0 auto
-  max-width: 768px
+  max-width: 480px
   background: inherit
   position: relative
   overflow: hidden
@@ -73,18 +87,21 @@
 
 .container__inner
   position: relative
-  padding: 25px
+  padding: 15px
 
 .container__inner-head
   display: flex
   align-items: center
   justify-content: space-between
   font-weight: normal
+  border-bottom: 1px solid rgba(#fff, .4)
 
 .container__inner-bottom
   display: flex
   align-items: center
   justify-content: space-between
+  padding-top: 15px
+  border-top: 1px solid rgba(#fff, .4)
   .fa
     margin-right: 10px
     font-size: 24px
@@ -94,7 +111,7 @@
 
 .day-date
   .day
-    font-size: 30px
+    font-size: 24px
     text-transform: uppercase
     margin: 0 0 15px 0
   .date
@@ -125,8 +142,7 @@
   width: 270px
 
 .location-header
-  font-size: 40px
-  font-weight: normal
+  font-size: 30px
   margin: 0
 
 .container__inner-meta
@@ -140,23 +156,27 @@
   justify-content: space-between
   max-width: 270px
 .temperature__main-big
-  font-size: 130px
+  font-size: 80px
 
 .temperature__state
-  margin-left: 25px
-  font-size: 30px
+  //margin-left: 25px
+  font-size: 36px
 
 .temperature__state-button
   display: block
   background: 0
-  width: 50px
-  height: 50px
+  // width: 50px
+  // height: 50px
   border: none
   color: #ffffff
-  margin: 10px 0
+  // margin: 10px 0
   cursor: pointer
+  border: 2px solid transparent
+  border-radius: 5px
+  padding: 5px
   &:hover
     color: #f8a400
+    border: 2px dashed rgba(#fff, .2)
   &:focus
     color: #f8a400
 
@@ -171,7 +191,7 @@
   width: 50%
   font-size: 20px
   img
-    width: 300px
+    width: 200px
     height: auto
     // margin: 0
     // padding: 0
@@ -192,7 +212,7 @@
 
 
 .weather-state
-  font-size: 30px
+  font-size: 24px
   margin: 0
   text-transform: uppercase
   // font-weight: 200
@@ -213,7 +233,7 @@
   flex-direction: column
   justify-content: center
   position: relative
-  padding: 20px
+  padding: 15px
   border-radius: 8px
   transition: all .25s ease
   &:hover
@@ -225,8 +245,8 @@
 
 .active
   color: #F8A400
-  border-radius: 8px
-  background-color: rgba(#fff, .2)
+  // border-radius: 8px
+  // background-color: rgba(#fff, .2)
 
 .container__tools
   margin: 0 auto
@@ -238,7 +258,7 @@
 
 
 .container__tools-item
-  padding: 25px
+  padding: 15px
   //width: calc(50% - 50px)
   container__tools-itemborder-right: 1px solid rgba(#fff, .3)
   .history-h3
@@ -280,6 +300,9 @@
   &:hover
     color: #F8A400
 
+.search-city
+  text-transform: capitalize
+  margin: 10px 0 0 0
 .clear-button
   background-color: transparent
   margin: 0 0 0 15px
@@ -289,6 +312,8 @@
   border-radius: 3px
   &:hover
     background-color: rgba(#fff, .3)
+  i
+    pointer-events: none
 
 
 // .pac-item > span:last-child

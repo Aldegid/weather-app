@@ -8,66 +8,87 @@ export default class FavouriteLocations extends Component {
   }
 
   init() {
-    ['updateMyself','getWeatherFromFavorite']
-    .forEach(methodName => this[methodName] = this[methodName].bind(this));
+    ["updateMyself", "getWeatherFromFavorite", "removeFavItem"].forEach(
+      methodName => (this[methodName] = this[methodName].bind(this))
+    );
+    this.state = {
+      favorite: JSON.parse(localStorage.getItem("favourite"))
+    };
   }
 
   getWeatherFromFavorite(e) {
-    console.log(e.target);
-    AppState.update('SHOWFAVOURITE', e.target.id);
+    //console.log(e.target);
+    AppState.update("SHOWFAVOURITE", e.target.id);
   }
 
-  updateMyself() {
-    this._render();
+  updateMyself(newState) {
+    // console.log(newState, 'newState');
+    this.state.favorite = newState;
+    this.updateState(newState);
+  }
+
+  removeFavItem(e) {
+    // console.log(this.state.favorite, 'favArray');
+    let favItem = this.state.favorite.indexOf(
+      e.target.parentNode.firstChild.id
+    );
+        this.state.favorite.splice(favItem, 1);
+        // console.log(this.state.favorite, 'favArray');
+        localStorage.setItem("favourite", JSON.stringify(this.state.favorite));
+        AppState.update("FAVOURITE", this.state.favorite);
+
+
+
   }
 
   render() {
     const favItems = JSON.parse(localStorage.getItem("favourite"));
-    if(favItems) {
+    if (favItems) {
       return favItems.map(item => {
         return {
-          tag: 'div',
-          classList: ['favorite-item'],
+          tag: "div",
+          classList: ["favorite-item"],
           children: [
             {
-              tag: 'p',
-              classList: ['favourite-city'],
+              tag: "p",
+              classList: ["favourite-city"],
               content: item,
               attributes: [
                 {
-                  name: 'id',
+                  name: "id",
                   value: item
                 }
               ],
               eventHandlers: {
                 click: this.getWeatherFromFavorite
               }
-
             },
             {
-              tag: 'button',
-              classList:['clear-button'],
+              tag: "button",
+              classList: ["clear-button"],
               attributes: [
                 {
-                  name: 'type',
-                  value: 'button'
+                  name: "type",
+                  value: "button"
                 }
               ],
+              eventHandlers: {
+                click: this.removeFavItem
+              },
+
               children: [
                 {
-                  tag: 'i',
-                  classList: ['fa', 'fa-trash']
+                  tag: "i",
+                  classList: ["fa", "fa-trash"]
                 }
               ]
             }
           ]
-
-        }
+        };
       });
     } else {
-      return ''
+      return "";
     }
-
 
     // {
     //   tag: 'div',

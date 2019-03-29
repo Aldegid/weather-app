@@ -15,7 +15,7 @@ export default class WeatherForecastItem extends Component {
           {
             tag: 'p',
             classList: ["day-small"],
-            content: this.props.weekDay
+            content: this.props.weekDay.substring(0, 3).toUpperCase()
           },
           {
             tag: 'div',

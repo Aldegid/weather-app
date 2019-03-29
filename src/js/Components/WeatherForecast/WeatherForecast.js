@@ -74,7 +74,7 @@ export default class WeatherForecast extends Component {
   }
 
   init() {
-    ['updateMyself', 'computeUnit', 'geoLocationData']
+    ['updateMyself', 'computeUnit', 'geoLocationData', 'showDetailWeather']
       .forEach(methodName => this[methodName] = this[methodName].bind(this));
     this.apiData = null;
       this.state = {
@@ -82,6 +82,10 @@ export default class WeatherForecast extends Component {
         unit : 'metric',
         city: null
     }
+  }
+
+  showDetailWeather(e) {
+    console.log(e.target);
   }
 
   computeUnit(updatedUnit){
@@ -112,7 +116,7 @@ export default class WeatherForecast extends Component {
 
   render() {
     if(this.apiData){
-
+ console.log(this.apiData);
       return [
         {
           tag: 'div',
@@ -121,46 +125,49 @@ export default class WeatherForecast extends Component {
             {
               tag: 'div',
               classList: ["container__inner-small"],
+              eventHandlers: {
+                click: this.showDetailWeather
+              },
               children: [
                 {
                   tag: WeatherForecastItem,
                   props: {
-                    weekDay: `${timeConverter(this.apiData.list[3].dt, "dayweek")}`,
-                    imgUrl: getWeatherIcon(this.apiData.list[3].weather[0].main),
-                    temperature: `${this.apiData.list[3].main.temp}`
+                    weekDay: `${timeConverter(this.apiData.list[7].dt, "dayweek")}`,
+                    imgUrl: getWeatherIcon(this.apiData.list[7].weather[0].main),
+                    temperature: `${this.apiData.list[7].main.temp}`
                   }
                 },
                 {
                   tag: WeatherForecastItem,
                   props: {
-                    weekDay: `${timeConverter(this.apiData.list[11].dt, "dayweek")}`,
-                    imgUrl: getWeatherIcon(this.apiData.list[11].weather[0].main),
-                    temperature: `${this.apiData.list[11].main.temp}`
+                    weekDay: `${timeConverter(this.apiData.list[15].dt, "dayweek")}`,
+                    imgUrl: getWeatherIcon(this.apiData.list[15].weather[0].main),
+                    temperature: `${this.apiData.list[15].main.temp}`
                   }
                 },
                 {
                   tag: WeatherForecastItem,
                   props: {
-                    weekDay: `${timeConverter(this.apiData.list[19].dt, "dayweek")}`,
-                    imgUrl: getWeatherIcon(this.apiData.list[19].weather[0].main),
-                    temperature: `${this.apiData.list[19].main.temp}`
+                    weekDay: `${timeConverter(this.apiData.list[23].dt, "dayweek")}`,
+                    imgUrl: getWeatherIcon(this.apiData.list[23].weather[0].main),
+                    temperature: `${this.apiData.list[23].main.temp}`
 
                   }
                 },
                 {
                   tag: WeatherForecastItem,
                   props: {
-                    weekDay: `${timeConverter(this.apiData.list[27].dt, "dayweek")}`,
-                    imgUrl: getWeatherIcon(this.apiData.list[27].weather[0].main),
-                    temperature: `${this.apiData.list[27].main.temp}`
+                    weekDay: `${timeConverter(this.apiData.list[31].dt, "dayweek")}`,
+                    imgUrl: getWeatherIcon(this.apiData.list[31].weather[0].main),
+                    temperature: `${this.apiData.list[31].main.temp}`
                   }
                 },
                 {
                   tag: WeatherForecastItem,
                   props: {
-                    weekDay: `${timeConverter(this.apiData.list[35].dt, "dayweek")}`,
-                    imgUrl: getWeatherIcon(this.apiData.list[35].weather[0].main),
-                    temperature: `${this.apiData.list[35].main.temp}`
+                    weekDay: `${timeConverter(this.apiData.list[39].dt, "dayweek")}`,
+                    imgUrl: getWeatherIcon(this.apiData.list[39].weather[0].main),
+                    temperature: `${this.apiData.list[39].main.temp}`
                   }
                 },
               ]

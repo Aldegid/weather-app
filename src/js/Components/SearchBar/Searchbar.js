@@ -8,32 +8,44 @@ google.maps.event.addDomListener(window, 'load', googleAutocomplete);
 export default class Searchbar extends Component {
   constructor(host, props) {
     super(host, props);
-
+    //AppState.watch("USERINPUT", this.updateMyself);
   }
 
   init() {
-    this.handleChange = this.handleChange.bind(this);
+    ["updateMyself", "handleChange"].forEach(
+      methodName => (this[methodName] = this[methodName].bind(this))
+    );
     this.state = {
       history: localStorage.getItem("history") ? JSON.parse(localStorage.getItem("history")) : [],
     }
+  }
+
+  updateMyself(newState) {
+    this.updateState(newState);
   }
 
   handleChange(e) {
     // e.preventDefault();
     // e.stopPropagation();
     //console.log(e.target.value);
-    AppState.update('USERINPUT', e.target.value);
+
     if(this.state.history.includes(e.target.value)) {
       return
-    } else {
+    }
+    if(this.state.history.length > 4) {
+      this.state.history.shift();
+      this.state.history.push(e.target.value);
+    }
+    else {
       this.state.history.push(e.target.value);
     }
     localStorage.setItem('history', JSON.stringify(this.state.history));
-
-    //return e.target.value;
+    AppState.update('USERINPUT', e.target.value);
   }
 
   render() {
+    const date = new Date();
+    console.log(date.toLocaleDateString());
     return  [
       {
         tag: 'div',
@@ -46,7 +58,7 @@ export default class Searchbar extends Component {
               {name: 'type', value: 'search'},
               {name: 'name', value: 'search'},
               {name: 'id', value: 'search'},
-              {name: 'placeholder', value: 'Search by city name or geo location'},
+              {name: 'placeholder', value: 'Search by city name...'},
             ],
             eventHandlers: {
               change: this.handleChange
