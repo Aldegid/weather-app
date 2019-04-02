@@ -154,7 +154,7 @@ export default class CurrentWeather extends Component {
       const favBTn = document.querySelector('.fav-button');
       const unitMetric = document.querySelector('.celsium');
       const unitImperial = document.querySelector('.farenheit');
-      if(localStorage.getItem('unit') === 'metric') {
+      if(localStorage.getItem('unit') === 'metric' || !localStorage.getItem('unit')) {
         unitMetric.classList.add('active')
       } else {
         unitMetric.classList.remove('active');

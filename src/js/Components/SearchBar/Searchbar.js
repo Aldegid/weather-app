@@ -25,22 +25,24 @@ export default class Searchbar extends Component {
   }
 
   handleChange(e) {
-    // e.preventDefault();
-    // e.stopPropagation();
-    //console.log(e.target.value);
+    e.preventDefault();
+    e.stopPropagation();
+    const searchInput = document.querySelector('.container__inputs-search');
+    console.log(searchInput.value);
 
-    if(this.state.history.includes(e.target.value)) {
+
+    if(this.state.history.includes(searchInput.value)) {
       return
     }
     if(this.state.history.length > 4) {
       this.state.history.shift();
-      this.state.history.push(e.target.value);
+      this.state.history.push(searchInput.value);
     }
     else {
-      this.state.history.push(e.target.value);
+      this.state.history.push(searchInput.value);
     }
     localStorage.setItem('history', JSON.stringify(this.state.history));
-    AppState.update('USERINPUT', e.target.value);
+    AppState.update('USERINPUT', searchInput.value);
   }
 
   render() {
@@ -56,28 +58,31 @@ export default class Searchbar extends Component {
             classList: ['container__inputs'],
             children: [
               {
-                tag: 'input',
-                classList: ['container__inputs-search'],
-                attributes: [
-                  {name: 'type', value: 'search'},
-                  {name: 'name', value: 'search'},
-                  {name: 'id', value: 'search'},
-                  {name: 'placeholder', value: 'Search by city name...'},
-                ],
+                tag: 'form',
+                classList: ['main__form'],
                 eventHandlers: {
-                  change: this.handleChange
-                }
-              },
-              {
-                tag: 'div',
-                classList: ['search-icon'],
+                  submit: this.handleChange
+                },
                 children: [
                   {
-                    tag: 'i',
-                    classList: ['fa', 'fa-search'],
-                  }
+                    tag: 'input',
+                    classList: ['container__inputs-search'],
+                    attributes: [
+                      {name: 'type', value: 'search'},
+                      {name: 'name', value: 'search'},
+                      {name: 'id', value: 'search'},
+                      {name: 'placeholder', value: 'Search by city name...'},
+                      {name: 'require', value: 'require'}
+                    ],
+                  },
+                  {
+                    tag: 'button',
+                    classList: ['search__button'],
+                    content: `<i class="fa fa-search" aria-hidden="true"></i>`
+                  },
                 ]
-              }
+              },
+
             ]
           }
         ]
