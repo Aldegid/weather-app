@@ -17,7 +17,7 @@ export default class Wind extends Component {
           {
             tag: 'span',
             classList: ["humidity-item"],
-            content:'Humidity: ' + this.props.quantity + "%",
+            content:`<span class="params_desc">Humidity:</span> ${this.props.quantity} %`
           }
         ]
       }

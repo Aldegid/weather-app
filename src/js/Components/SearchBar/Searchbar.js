@@ -49,33 +49,40 @@ export default class Searchbar extends Component {
     return  [
       {
         tag: 'div',
-        classList: ['container__inputs'],
+        classList: ['container', 'container__top'],
         children: [
           {
-            tag: 'input',
-            classList: ['container__inputs-search'],
-            attributes: [
-              {name: 'type', value: 'search'},
-              {name: 'name', value: 'search'},
-              {name: 'id', value: 'search'},
-              {name: 'placeholder', value: 'Search by city name...'},
-            ],
-            eventHandlers: {
-              change: this.handleChange
-            }
-          },
-          {
             tag: 'div',
-            classList: ['search-icon'],
+            classList: ['container__inputs'],
             children: [
               {
-                tag: 'i',
-                classList: ['fa', 'fa-search'],
+                tag: 'input',
+                classList: ['container__inputs-search'],
+                attributes: [
+                  {name: 'type', value: 'search'},
+                  {name: 'name', value: 'search'},
+                  {name: 'id', value: 'search'},
+                  {name: 'placeholder', value: 'Search by city name...'},
+                ],
+                eventHandlers: {
+                  change: this.handleChange
+                }
+              },
+              {
+                tag: 'div',
+                classList: ['search-icon'],
+                children: [
+                  {
+                    tag: 'i',
+                    classList: ['fa', 'fa-search'],
+                  }
+                ]
               }
             ]
           }
         ]
-      }
+      },
+
     ];
   }
 }

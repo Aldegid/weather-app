@@ -8,10 +8,6 @@ export default class WeatherForecastItem extends Component {
 
   render() {
     return [
-      {
-        tag: 'div',
-        classList: ["container__inner-small-item"],
-        children: [
           {
             tag: 'p',
             classList: ["day-small"],
@@ -24,12 +20,11 @@ export default class WeatherForecastItem extends Component {
           },
           {
             tag: Temperature,
+            classList: ['temperature-small'],
             props: {
               temperature: Math.round(this.props.temperature),
             }
           }
-        ]
-      }
     ];
   }
 }

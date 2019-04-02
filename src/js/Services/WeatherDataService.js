@@ -27,7 +27,6 @@ class WeatherDataService {
       });
   }
   getCurrentWeather(userInput, unit) {
-    //const city = 'london'
     const api = `https://api.openweathermap.org//data/2.5/weather?q=${userInput}&units=${unit}&appid=${this.apiKey}`
     return fetch(api).then(response => {
       if(response.ok) {
@@ -50,7 +49,9 @@ class WeatherDataService {
         return response.json();
       }
       if(response.status === 404) {
-        document.querySelector('.container__inner-small').innerHTML = ``
+        const container = document.querySelector('.container-small')
+        container.innerHTML = '';
+        container.classList.add('d-none');
       } else {
         Promise.reject(response.statusText);
       }

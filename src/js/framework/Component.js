@@ -55,6 +55,11 @@ export default class Component {
           if (element.classList) {
             container.classList.add(...element.classList);
           }
+          if (element.attributes) {
+            element.attributes.forEach(attributeSpec => {
+              container.setAttribute(attributeSpec.name, attributeSpec.value);
+            });
+          }
           new element.tag(container, element.props);
 
           return container;

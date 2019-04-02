@@ -8,52 +8,45 @@ import AppState from "../../Services/AppState";
 import WeatherDataService from "../../Services/WeatherDataService";
 import { timeConverter } from "../../helpers/helpers";
 
-// const forecast = WeatherDataService.getWeatherForecast();
-// forecast.then(item => item.list.forEach(day => console.log(day.weather[0]['description'])));
 
-import imgUrlClouds from "../../../img/weather-icons/animated/cloudy-day-3.svg";
+import imgUrlCloudsDay from "../../../img/weather-icons/animated/cloudy-day-3.svg";
+import imgUrlCloudsNight from "../../../img/weather-icons/animated/cloudy-night-3.svg";
 import imgUrlFewClouds from "../../../img/weather-icons/animated/cloudy-day-1.svg";
 import imgUrlScatteredClouds from "../../../img/weather-icons/animated/cloudy-day-2.svg";
 import imgUrlBrokenClouds from "../../../img/weather-icons/animated/cloudy-day-3.svg";
-import imgUrlClear from "../../../img/weather-icons/animated/day.svg";
-import imgUrlLightRain from "../../../img/weather-icons/animated/rainy-1.svg";
+import imgUrlClearDay from "../../../img/weather-icons/animated/day.svg";
+import imgUrlClearNight from "../../../img/weather-icons/animated/night.svg";
+import imgUrlLightRain from "../../../img/weather-icons/animated/rainy-4.svg";
 import imgUrlModerateRain from "../../../img/weather-icons/animated/rainy-2.svg";
-import imgUrlRain from "../../../img/weather-icons/animated/rainy-3.svg";
+import imgUrlRain from "../../../img/weather-icons/animated/rainy-6.svg";
 import imgUrlShowerRain from "../../../img/weather-icons/animated/rainy-7.svg";
 import imgUrlSnow from "../../../img/weather-icons/animated/snowy-5.svg";
 import imgUrlThunderstorm from "../../../img/weather-icons/animated/thunder.svg";
+import imgUrlEzhik from "../../../img/ezhik.gif";
 
 // import {getWeatherIcon} from "../../helpers/helpers"
 
-const getWeatherIcon = wetherState => {
+const getWeatherIcon = (wetherState, dayOrNight) => {
   if (wetherState === "Clear") {
-
-    return imgUrlClear;
+    if(dayOrNight) {
+      return imgUrlClearDay
+    } else {
+      return imgUrlClearNight
+    }
   }
   if(wetherState === 'Clouds') {
-    return imgUrlClouds
+    if(dayOrNight) {
+      return imgUrlCloudsDay
+    } else {
+      return imgUrlCloudsNight
+    }
   }
-  // if (wetherState === "few clouds") {
-  //   return imgUrlFewClouds;
-  // }
-  // if (wetherState === "scattered clouds") {
-  //   return imgUrlScatteredClouds;
-  // }
-  // if (wetherState === "broken clouds") {
-  //   return imgUrlBrokenClouds;
-  // }
-  // if (wetherState === "light rain") {
-  //   return imgUrlLightRain;
-  // }
-  // if (wetherState === "moderate rain") {
-  //   return imgUrlModerateRain;
-  // }
+  if(wetherState === 'Haze' || wetherState === 'Mist' || wetherState === 'Smoke' || wetherState === 'Fog') {
+    return imgUrlEzhik
+  }
   if (wetherState === "Rain") {
     return imgUrlRain;
   }
-  // if (wetherState === "shower rain") {
-  //   return imgUrlShowerRain;
-  // }
   if (wetherState === "Snow") {
     return imgUrlSnow;
   }
@@ -68,25 +61,28 @@ const getWeatherIcon = wetherState => {
 export default class CurrentWeather extends Component {
   constructor(host, props) {
     super(host, props);
-    //this.apiData;
     this.geoLocationData();
     this.favStar = document.querySelector('.fav-button');
     AppState.watch("USERINPUT", this.updateMyself);
     AppState.watch("UNIT", this.computeUnit);
     AppState.watch("SHOWFAVOURITE", this.updateMyself);
     AppState.watch("SHOWFROMHISTORY", this.updateMyself);
+    AppState.watch("SHOWDETAILFORECAST", this.showForecastItem);
   }
 
   init() {
-    ['updateMyself', 'geoLocationData', 'changeUnitToImperial','changeUnitToMetric', 'computeUnit', 'toggleFavorite', 'isCityInFav']
+    ['updateMyself', 'geoLocationData', 'changeUnitToImperial','changeUnitToMetric', 'computeUnit', 'toggleFavorite', 'checkActive', 'showForecastItem']
       .forEach(methodName => this[methodName] = this[methodName].bind(this));
     this.apiData = null;
+    this.forecastData = null;
     this.state = {
       weatherType : 'weather',
       favorite: localStorage.getItem("favourite") ? JSON.parse(localStorage.getItem("favourite")) : [],
-      unit : 'metric',
+      unit : localStorage.getItem("unit") ? localStorage.getItem("unit") : 'metric',
       city: null,
+      country: null,
       celsium: 'active',
+      day: '',
       unitWind: 'm/s'
     }
   }
@@ -99,11 +95,24 @@ export default class CurrentWeather extends Component {
       this.updateState(updatedUnit)
     });
   }
+  showForecastItem(currentItem) {
+    WeatherDataService.getWeatherForecast(this.state.city, this.state.unit).then(data => {
+      //console.log(data, 'forecast');
+      this.apiData = data.list[currentItem];
+      this.forecastData = data;
+      this.state.city = this.forecastData.city.name;
+      this.state.country = this.forecastData.city.country;
+      this.updateState(this.apiData);
+    });
+  }
 
   geoLocationData() {
     WeatherDataService.getWetherByGeolocation(this.state.weatherType, this.state.unit).then(data => {
       this.apiData = data;
       this.state.city = this.apiData.name;
+      this.state.country = this.apiData.sys.country;
+      this.state.day = this.apiData.dt < this.apiData.sys.sunset;
+      AppState.update('ISDAY', this.state.day);
       this.updateState(this.apiData);
     });
   }
@@ -113,11 +122,13 @@ export default class CurrentWeather extends Component {
     WeatherDataService.getCurrentWeather(userinput, this.state.unit).then(data => {
       this.apiData = data;
       this.state.city = this.apiData.name;
+      this.state.country = this.apiData.sys.country;
       this.updateState(this.apiData)
     });
   }
 
   changeUnitToImperial(){
+    localStorage.setItem('unit', 'imperial');
     AppState.update('UNIT', {
       city: this.state.city,
       unit: 'imperial',
@@ -128,7 +139,7 @@ export default class CurrentWeather extends Component {
   }
 
   changeUnitToMetric(){
-    //this.state.unit = 'metric';
+    localStorage.setItem('unit', 'metric');
     AppState.update('UNIT', {
       city: this.state.city,
       unit: 'metric',
@@ -138,40 +149,50 @@ export default class CurrentWeather extends Component {
     })
   }
 
-  isCityInFav() {
+  checkActive() {
     setTimeout(() => {
       const favBTn = document.querySelector('.fav-button');
-      if(this.state.favorite.includes(`${this.state.city}, ${this.apiData.sys.country}`)) {
+      const unitMetric = document.querySelector('.celsium');
+      const unitImperial = document.querySelector('.farenheit');
+      if(localStorage.getItem('unit') === 'metric') {
+        unitMetric.classList.add('active')
+      } else {
+        unitMetric.classList.remove('active');
+      }
+      if(localStorage.getItem('unit') === 'imperial') {
+        unitImperial.classList.add('active');
+      } else {
+        unitImperial.classList.remove('active');
+      }
+      if(this.state.favorite.includes(`${this.state.city}, ${this.state.country}`)) {
         favBTn.classList.add('active');
       }
     }, 0);
 
   }
 
-
   toggleFavorite(){
     const favBTn = document.querySelector('.fav-button');
     //console.log(this.state.city);
     favBTn.classList.toggle('active');
-    const favItem = this.state.favorite.indexOf(`${this.state.city}, ${this.apiData.sys.country}`);
+    const favItem = this.state.favorite.indexOf(`${this.state.city}, ${this.state.country}`);
     //console.log(favItem, `${this.state.city}, ${this.apiData.sys.country}`);
-    if(this.state.favorite.includes(`${this.state.city}, ${this.apiData.sys.country}`)) {
+    if(this.state.favorite.includes(`${this.state.city}, ${this.state.country}`)) {
       if(favItem !== -1) {
         this.state.favorite.splice(favItem, 1);
       }
     } else if(this.state.favorite.length < 5) {
-      this.state.favorite.push(`${this.state.city}, ${this.apiData.sys.country}`);
+      this.state.favorite.push(`${this.state.city}, ${this.state.country}`);
     }
 
     localStorage.setItem('favourite', JSON.stringify(this.state.favorite));
     AppState.update("FAVOURITE", this.state.favorite);
-    // this.updateState();
   }
 
 
   render() {
     if (this.apiData) {
-      this.isCityInFav();
+      this.checkActive();
       //console.log('hoho,', 'geodata arrived!')
       //console.log(`Kiyv, UA ${this.geoData.name}`, ": var from content");
       //console.log(this.apiData, "render");
@@ -200,8 +221,8 @@ export default class CurrentWeather extends Component {
                         {
                           tag: "h2",
                           classList: ["location-header"],
-                          content: `${this.apiData.name}, ${
-                            this.apiData.sys.country
+                          content: `${this.apiData.name ?  this.apiData.name : this.forecastData.city.name}, ${
+                            this.state.country
                           }`
                         },
                         {
@@ -332,9 +353,7 @@ export default class CurrentWeather extends Component {
                         "container__inner-center",
                         "container__inner-item"
                       ],
-                      content: `<img src="${getWeatherIcon(
-                        this.apiData.weather[0].main
-                      )}" alt="currentwether" />`
+                      content: `<img src="${getWeatherIcon(this.apiData.weather[0].main, this.apiData.dt < this.apiData.sys.sunset)}" alt="${this.apiData.weather[0].main}"/>`
                     }
                   ]
                 },

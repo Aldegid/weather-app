@@ -32,16 +32,8 @@ export default class WeatherTools extends Component {
                   {
                     tag: 'div',
                     classList: ['history-head'],
+                    content:`<h3 class="history-h3"> <i class="fa fa-clock-o" aria-hidden="true"></i>History</h3>`,
                     children: [
-                      {
-                        tag: 'i',
-                        classList: ['fa', 'fa-clock-o'],
-                      },
-                      {
-                        tag: 'h3',
-                        classList: ['history-h3'],
-                        content: 'History'
-                      },
                       {
                         tag: 'button',
                         classList:['clear-button'],

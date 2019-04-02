@@ -10,7 +10,7 @@ export default class Wind extends Component {
       {
         tag: 'div',
         classList: ["pressure"],
-        content: `<img src="${imageUrl}" alt="pressure" /> Pressure: ${this.props.quantity} ${this.props.unit}`
+        content: `<img src="${imageUrl}" alt="pressure" /><span class="params_desc">Pressure: </span>${Math.round(this.props.quantity)} ${this.props.unit}`
       }
     ];
   }

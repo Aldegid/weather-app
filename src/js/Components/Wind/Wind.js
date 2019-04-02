@@ -17,7 +17,7 @@ export default class Wind extends Component {
           {
             tag: 'span',
             classList: ["wind-item"],
-            content:'Wind: ' + this.props.speed + " " + this.props.unit,
+            content:`<span class="params_desc">Wind:</span> ${this.props.speed} ${this.props.unit}`,
           }
         ]
       }
