@@ -46,8 +46,6 @@ export default class Searchbar extends Component {
   }
 
   render() {
-    const date = new Date();
-    console.log(date.toLocaleDateString());
     return  [
       {
         tag: 'div',

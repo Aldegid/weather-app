@@ -1,5 +1,6 @@
-import 'normalize.css'
-import '../sass/main.sass'
+import 'normalize.css';
+import '../sass/main.sass';
+import '@babel/polyfill';
 //import googleAutocomplete from "./googlePlaces"
 //google.maps.event.addDomListener(window, 'load', googleAutocomplete);
 

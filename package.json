@@ -13,15 +13,16 @@
   "author": "aldegid",
   "license": "MIT",
   "devDependencies": {
-    "cssnano": "^4.1.10",
-    "sass": "^1.17.2",
     "autoprefixer": "^9.4.9",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
     "babel-preset-env": "^1.7.0",
-    "node-sass": "^4.11.0"
+    "cssnano": "^4.1.10",
+    "node-sass": "^4.11.0",
+    "sass": "^1.17.2"
   },
   "dependencies": {
+    "@babel/polyfill": "^7.4.3",
     "normalize.css": "^8.0.1",
     "shx": "^0.3.2"
   }
