@@ -25,5 +25,8 @@
     "@babel/polyfill": "^7.4.3",
     "normalize.css": "^8.0.1",
     "shx": "^0.3.2"
-  }
+  },
+  "browserslist": [
+    "> 5%"
+  ]
 }
