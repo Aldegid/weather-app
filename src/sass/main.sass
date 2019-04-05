@@ -17,7 +17,6 @@
   min-height: 100vh
   font-size: 20px
   padding: 30px 0
-  // font-weight: 300
 
 .d-none
   display: none
@@ -40,8 +39,6 @@
 .container__inputs
   position: relative
   margin: 0 auto
-  //max-width: 480px
-  //padding: 25px 0
   display: flex
   justify-content: space-between
 
@@ -161,8 +158,6 @@
 .container__inner-location
   display: flex
   align-items: center
-  //justify-content: space-between
-  //width: 270px
 
 .location-header
   font-size: 30px
@@ -183,17 +178,13 @@
   font-size: 80px
 
 .temperature__state
-  //margin-left: 25px
   font-size: 36px
 
 .temperature__state-button
   display: block
   background: 0
-  // width: 50px
-  // height: 50px
   border: none
   color: #ffffff
-  // margin: 10px 0
   cursor: pointer
   border: 2px solid transparent
   border-radius: 5px
@@ -205,13 +196,14 @@
     color: #f8a400
 
 .avg-temperature
+  display: flex
   text-align: right
   font-size: 24px
   white-space: nowrap
   span
-    margin-left: 15px
-  .fa
     margin-left: 10px
+  .fa
+    margin-left: 5px
 
 
 .container__inner-item
@@ -220,9 +212,6 @@
   img
     width: 200px
     height: auto
-    // margin: 0
-    // padding: 0
-    // display: block
   p
     margin: 10px 0
 
@@ -242,7 +231,6 @@
   font-size: 24px
   margin: 0
   text-transform: uppercase
-  // font-weight: 200
 
 .container-small
   margin-top: 25px
@@ -276,8 +264,6 @@
 
 .active
   color: #F8A400
-  // border-radius: 8px
-  // background-color: rgba(#fff, .2)
 
 .container__tools
   margin: 0 auto
@@ -308,14 +294,11 @@
   display: flex
   justify-content: space-between
   align-items: center
-  //border-bottom: 1px solid rgba(#fff, .4)
   padding-bottom: 10px
   .fa
     font-size: 24px
-    //margin-right: 15px
 
 .favorite-head
-  //border-bottom: 1px solid rgba(#fff, .4)
   padding-bottom: 10px
   .fa
     font-size: 24px
@@ -325,7 +308,6 @@
   display: flex
   align-items: center
   justify-content: space-between
-  //margin-top: 10px
   margin-bottom: 0
   padding: 5px 5px 5px 10px
   border-radius: 5px
@@ -340,18 +322,15 @@
   &:hover
     color: #F8A400
 
-
 .search-city
   text-transform: capitalize
   border-radius: 5px
-  //margin: 10px 0 0 0
   padding: 5px 0 5px 5px
   &:nth-child(odd)
     background-color: rgba(#fff, .2)
 .clear-button
   background-color: transparent
   padding: 0 5px
-  //margin: 0 0 0 15px
   border: none
   cursor: pointer
   color: #ffffff
@@ -361,11 +340,6 @@
     color: #F8A400
   i
     pointer-events: none
-
-
-// .pac-item > span:last-child
-//     display: none
-
 
 
 @import 'media'
