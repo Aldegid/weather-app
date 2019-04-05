@@ -70,19 +70,20 @@ export default class WeatherForecast extends Component {
     this.apiData = null;
       this.state = {
         weatherType : 'forecast',
-        unit : 'metric',
+        unit : localStorage.getItem("unit") ? localStorage.getItem("unit") : 'metric',
         city: null,
         day: null
     }
   }
 
   showDetailWeather(e) {
-   //console.log(e.target.dataset.item);
-    AppState.update('SHOWDETAILFORECAST', e.target.dataset.item);
+    AppState.update('SHOWDETAILFORECAST', {
+      currItem: e.target.dataset.item,
+      isDay: this.state.day
+    });
   }
 
   computeUnit(updatedUnit){
-    //console.log(updatedUnit);
     WeatherDataService.getWeatherForecast(updatedUnit.city, updatedUnit.unit).then(data => {
       this.apiData = data;
       this.updateState(updatedUnit);
@@ -103,9 +104,7 @@ export default class WeatherForecast extends Component {
   }
 
   updateMyself(userinput) {
-    //console.log(userinput, 'forecast delta')
     WeatherDataService.getWeatherForecast(userinput, this.state.unit).then(data => {
-      //console.log(data);
       this.apiData = data;
       this.state.city = this.apiData.city.name;
       this.updateState(this.apiData);
@@ -114,8 +113,6 @@ export default class WeatherForecast extends Component {
 
   render() {
     if(this.apiData){
-      //console.log('day', this.state.day);
-      //console.log(this.apiData);
       return [
         {
           tag: 'div',
@@ -227,6 +224,5 @@ export default class WeatherForecast extends Component {
     } else {
       return [''];
     }
-
   }
 }

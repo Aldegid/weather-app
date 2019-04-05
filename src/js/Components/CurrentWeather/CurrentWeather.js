@@ -24,8 +24,6 @@ import imgUrlSnow from "../../../img/weather-icons/animated/snowy-5.svg";
 import imgUrlThunderstorm from "../../../img/weather-icons/animated/thunder.svg";
 import imgUrlEzhik from "../../../img/ezhik.gif";
 
-// import {getWeatherIcon} from "../../helpers/helpers"
-
 const getWeatherIcon = (wetherState, dayOrNight) => {
   if (wetherState === "Clear") {
     if(dayOrNight) {
@@ -88,17 +86,14 @@ export default class CurrentWeather extends Component {
   }
 
   computeUnit(updatedUnit){
-    //console.log(updatedUnit);
     WeatherDataService.getCurrentWeather(updatedUnit.city, updatedUnit.unit).then(data => {
       this.apiData = data;
-      //this.state.city = this.apiData.name;
       this.updateState(updatedUnit)
     });
   }
   showForecastItem(currentItem) {
     WeatherDataService.getWeatherForecast(this.state.city, this.state.unit).then(data => {
-      //console.log(data, 'forecast');
-      this.apiData = data.list[currentItem];
+      this.apiData = data.list[currentItem.currItem];
       this.forecastData = data;
       this.state.city = this.forecastData.city.name;
       this.state.country = this.forecastData.city.country;
@@ -118,10 +113,10 @@ export default class CurrentWeather extends Component {
   }
 
   updateMyself(userinput) {
-    //console.log(userinput)
     WeatherDataService.getCurrentWeather(userinput, this.state.unit).then(data => {
       this.apiData = data;
       this.state.city = this.apiData.name;
+      this.state.day = this.apiData.dt < this.apiData.sys.sunset;
       this.state.country = this.apiData.sys.country;
       this.updateState(this.apiData)
     });
@@ -173,10 +168,8 @@ export default class CurrentWeather extends Component {
 
   toggleFavorite(){
     const favBTn = document.querySelector('.fav-button');
-    //console.log(this.state.city);
     favBTn.classList.toggle('active');
     const favItem = this.state.favorite.indexOf(`${this.state.city}, ${this.state.country}`);
-    //console.log(favItem, `${this.state.city}, ${this.apiData.sys.country}`);
     if(this.state.favorite.includes(`${this.state.city}, ${this.state.country}`)) {
       if(favItem !== -1) {
         this.state.favorite.splice(favItem, 1);
@@ -193,14 +186,6 @@ export default class CurrentWeather extends Component {
   render() {
     if (this.apiData) {
       this.checkActive();
-      //console.log('hoho,', 'geodata arrived!')
-      //console.log(`Kiyv, UA ${this.geoData.name}`, ": var from content");
-      //console.log(this.apiData, "render");
-      if (this.apiData.dt < this.apiData.sys.sunset) {
-        //console.log("day");
-      } else {
-        //console.log("night");
-      }
       return [
         {
           tag: "div",
@@ -353,7 +338,7 @@ export default class CurrentWeather extends Component {
                         "container__inner-center",
                         "container__inner-item"
                       ],
-                      content: `<img src="${getWeatherIcon(this.apiData.weather[0].main, this.apiData.dt < this.apiData.sys.sunset)}" alt="${this.apiData.weather[0].main}"/>`
+                      content: `<img src="${getWeatherIcon(this.apiData.weather[0].main, this.state.day)}" alt="${this.apiData.weather[0].main}"/>`
                     }
                   ]
                 },

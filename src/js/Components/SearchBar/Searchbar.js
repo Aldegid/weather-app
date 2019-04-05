@@ -8,7 +8,6 @@ google.maps.event.addDomListener(window, 'load', googleAutocomplete);
 export default class Searchbar extends Component {
   constructor(host, props) {
     super(host, props);
-    //AppState.watch("USERINPUT", this.updateMyself);
   }
 
   init() {
@@ -28,8 +27,6 @@ export default class Searchbar extends Component {
     e.preventDefault();
     e.stopPropagation();
     const searchInput = document.querySelector('.container__inputs-search');
-    console.log(searchInput.value);
-
 
     if(this.state.history.includes(searchInput.value)) {
       return

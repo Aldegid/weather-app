@@ -13,7 +13,6 @@ export default class SearchHistory extends Component {
   }
 
   getWeatherFromHistory(e) {
-    //console.log(e.target);
     AppState.update('SHOWFROMHISTORY', e.target.id);
   }
 
@@ -23,7 +22,6 @@ export default class SearchHistory extends Component {
 
   render() {
     const srchistory = JSON.parse(localStorage.getItem("history"));
-    //console.log(srchistory);
     if(srchistory) {
       return srchistory.map(item => {
         return {

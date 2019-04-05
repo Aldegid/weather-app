@@ -42,7 +42,6 @@ class WeatherDataService {
 
   }
   getWeatherForecast(userInput, unit) {
-    //const city = 'london'
     const api = `https://api.openweathermap.org//data/2.5/forecast?q=${userInput}&units=${unit}&appid=${this.apiKey}`
     return fetch(api).then(response => {
       if(response.ok) {
